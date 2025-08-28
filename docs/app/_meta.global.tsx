@@ -126,7 +126,7 @@ export default {
       'custom-theme': '',
       __: {
         type: 'separator',
-        title: 'Engineering'
+        title: 'More'
       },
       'about-link': {
         title: 'About Nextra',
