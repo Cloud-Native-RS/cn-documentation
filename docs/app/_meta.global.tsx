@@ -144,21 +144,15 @@ export default {
   },
   api: {
     type: 'page',
-    title: <span className="badge-new">API</span>
+    display: 'hidden'
   },
-  versions: {
-    type: 'menu',
-    title: 'Versions',
-    items: {
-      _3: {
-        title: 'Nextra v3 Docs',
-        href: 'https://nextra-v2-7hslbun8z-shud.vercel.app'
-      },
-      _2: {
-        title: 'Nextra v2 Docs',
-        href: 'https://nextra-v2-oe0zrpzjp-shud.vercel.app'
-      }
-    }
+  showcase: {
+    type: 'page',
+    display: 'hidden'
+  },
+  sponsors: {
+    type: 'page',
+    display: 'hidden'
   },
   blog: {
     type: 'page',
@@ -171,24 +165,6 @@ export default {
     type: 'page',
     theme: {
       typesetting: 'article'
-    }
-  },
-  showcase: {
-    type: 'page',
-    theme: {
-      typesetting: 'article',
-      layout: 'full',
-      timestamp: false,
-      toc: false
-    }
-  },
-  sponsors: {
-    type: 'page',
-    theme: {
-      typesetting: 'article',
-      layout: 'full',
-      timestamp: false,
-      toc: false
     }
   }
 }

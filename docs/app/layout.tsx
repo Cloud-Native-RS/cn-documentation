@@ -10,30 +10,28 @@ import xyflow from './showcase/_logos/xyflow.png'
 import './globals.css'
 
 export const metadata: Metadata = {
-  description: 'Make beautiful websites with Next.js & MDX.',
-  metadataBase: new URL('https://nextra.site'),
+  description: 'Cloud Native internal documentation - comprehensive guides, best practices, and resources for building cloud-native solutions.',
+  metadataBase: new URL('https://cloud-native.rs'),
   keywords: [
-    'Nextra',
-    'Next.js',
-    'React',
-    'JavaScript',
-    'MDX',
-    'Markdown',
-    'Static Site Generator'
+    'Cloud Native',
+    'Kubernetes',
+    'Microservices',
+    'DevOps',
+    'Documentation',
+    'Best Practices'
   ],
   generator: 'Next.js',
-  applicationName: 'Nextra',
+  applicationName: 'Cloud Native Documentation',
   appleWebApp: {
-    title: 'Nextra'
+    title: 'Cloud Native Docs'
   },
   title: {
-    default: 'Nextra – Next.js Static Site Generator',
-    template: '%s | Nextra'
+    default: 'Cloud Native Documentation',
+    template: '%s | Cloud Native Docs'
   },
   openGraph: {
-    // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     url: './',
-    siteName: 'Nextra',
+    siteName: 'Cloud Native Documentation',
     locale: 'en_US',
     type: 'website'
   },
@@ -41,21 +39,16 @@ export const metadata: Metadata = {
     'msapplication-TileColor': '#fff'
   },
   twitter: {
-    site: 'https://nextra.site'
+    site: 'https://cloud-native.rs'
   },
   alternates: {
-    // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     canonical: './'
   }
 }
 
 const banner = (
   <Banner dismissible={false}>
-    🎉 Nextra 4.0 is released. dimaMachina is looking{' '}
-    <Link href="https://github.com/dimaMachina" className="text-current!">
-      for a new job or consulting
-    </Link>
-    .
+    🚀 Welcome to Cloud Native Documentation
   </Banner>
 )
 const navbar = (
@@ -73,7 +66,7 @@ const navbar = (
         Cloud Native
       </span>
     }
-    projectLink="https://github.com/shuding/nextra"
+    projectLink="https://github.com/Cloud-Native-RS/cn-documentation"
   />
 )
 const footer = (
@@ -82,14 +75,13 @@ const footer = (
       className="x:focus-visible:nextra-focus flex items-center gap-1"
       target="_blank"
       rel="noreferrer"
-      title="vercel.com homepage"
-      href="https://vercel.com?utm_source=nextra.site"
+      title="Cloud Native Documentation"
+      href="https://cloud-native.rs"
     >
-      Powered by
-      <VercelLogo height="20" />
+      Powered by Cloud Native Team
     </a>
     <p className="mt-6 text-xs">
-      © {new Date().getFullYear()} The Nextra Project.
+      © {new Date().getFullYear()} Cloud Native Documentation.
     </p>
   </Footer>
 )
@@ -101,12 +93,12 @@ const RootLayout: FC<{
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <Head />
-      <body>
+      <body suppressHydrationWarning>
         <Layout
           banner={banner}
           navbar={navbar}
           pageMap={pageMap}
-          docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
+          docsRepositoryBase="https://github.com/Cloud-Native-RS/cn-documentation/tree/main/docs"
           editLink="Edit this page on GitHub"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           footer={footer}
