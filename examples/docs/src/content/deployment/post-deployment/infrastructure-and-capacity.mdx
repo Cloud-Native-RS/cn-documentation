@@ -1,0 +1,203 @@
+---
+title: Infrastructure
+---
+
+# Infrastructure and Capacity Planning
+
+Before deploying **Red Hat OpenShift**, it is crucial to thoroughly assess and plan your infrastructure requirements. This section provides detailed guidance on sizing, capacity planning, and infrastructure validation to ensure a successful deployment.
+
+---
+
+## Infrastructure Requirements
+
+### Compute Resources
+
+#### Control Plane Nodes (Masters)
+- **Minimum**: 3 nodes for high availability
+- **CPU**: 4 vCPUs minimum, 8+ vCPUs recommended
+- **Memory**: 16 GB RAM minimum, 32+ GB RAM recommended
+- **Storage**: 120 GB minimum per node (system + container runtime)
+
+#### Worker Nodes
+- **CPU**: 4-8 vCPUs minimum, scale based on workload requirements
+- **Memory**: 16-64 GB RAM depending on application needs
+- **Storage**: 120 GB minimum per node, additional storage for persistent volumes
+- **Scaling**: Plan for 20-30% capacity buffer for growth
+
+#### Infrastructure Nodes (Optional)
+- **Monitoring**: Dedicated nodes for Prometheus, Grafana, logging
+- **Storage**: Dedicated nodes for OpenShift Data Foundation
+- **Load Balancing**: Dedicated nodes for HAProxy or similar
+
+### Storage Requirements
+
+#### Persistent Storage
+- **Block Storage**: Ceph, OpenShift Data Foundation, or cloud-native solutions
+- **File Storage**: NFS for shared storage needs
+- **Object Storage**: S3-compatible storage for registry and backups
+- **Capacity**: Plan for 3-5x application storage requirements
+
+#### Local Storage
+- **System**: 120 GB minimum per node
+- **Container Runtime**: 100 GB minimum per node
+- **Temporary Storage**: 50 GB minimum per node for build processes
+
+### Networking Requirements
+
+#### Network Bandwidth
+- **Control Plane**: 1 Gbps minimum, 10 Gbps recommended
+- **Worker Nodes**: 1 Gbps minimum, 10 Gbps for high-performance workloads
+- **Storage Network**: 10 Gbps minimum for storage operations
+
+#### Network Latency
+- **Control Plane**: &lt;1ms latency between master nodes
+- **Worker Nodes**: &lt;5ms latency to control plane
+- **Storage**: &lt;2ms latency for optimal performance
+
+---
+
+## Capacity Planning
+
+### Workload Analysis
+
+#### Application Requirements
+- **Container Density**: Plan for 10-50 containers per worker node
+- **Resource Usage**: Monitor actual vs. planned resource consumption
+- **Scaling Patterns**: Understand horizontal vs. vertical scaling needs
+
+#### Growth Projections
+- **Short-term (3-6 months)**: 20-30% capacity increase
+- **Medium-term (6-12 months)**: 50-100% capacity increase
+- **Long-term (1+ years)**: 200-300% capacity increase
+
+### Resource Allocation Strategy
+
+#### CPU Allocation
+- **Reserved**: 10-15% for system overhead
+- **Guaranteed**: 60-70% for critical workloads
+- **Burstable**: 15-30% for development and testing
+
+#### Memory Allocation
+- **Reserved**: 15-20% for system overhead
+- **Guaranteed**: 50-60% for production workloads
+- **Burstable**: 20-35% for development and testing
+
+---
+
+## Hardware Specifications
+
+### Bare Metal Requirements
+
+#### Server Specifications
+- **CPU**: Intel Xeon or AMD EPYC processors
+- **Memory**: ECC DDR4/DDR5 RAM
+- **Storage**: NVMe SSDs for system, SSDs for data
+- **Network**: 10 Gbps network interfaces
+
+#### Storage Hardware
+- **Performance**: NVMe SSDs for high-performance workloads
+- **Capacity**: SATA SSDs for bulk storage
+- **Redundancy**: RAID configurations for data protection
+
+### Virtualization Requirements
+
+#### Hypervisor Specifications
+- **CPU**: 2-4 vCPUs per VM, enable nested virtualization
+- **Memory**: 16-64 GB RAM per VM
+- **Storage**: Thin provisioning with overcommit ratios
+- **Network**: Dedicated network interfaces per VM
+
+#### Resource Overcommit
+- **CPU**: 2:1 to 4:1 overcommit ratio
+- **Memory**: 1.5:1 to 2:1 overcommit ratio
+- **Storage**: 1.2:1 to 1.5:1 overcommit ratio
+
+---
+
+## Cloud Infrastructure
+
+### Public Cloud Considerations
+
+#### Instance Types
+- **Control Plane**: Memory-optimized instances (r5, r6 series)
+- **Worker Nodes**: General-purpose instances (m5, m6 series)
+- **Storage**: High-performance storage (gp3, io2)
+
+#### Network Configuration
+- **VPC**: Private subnets for cluster communication
+- **Load Balancers**: Managed load balancers for API and ingress
+- **Security Groups**: Restrictive firewall rules
+
+### Hybrid Cloud Setup
+
+#### On-Premises Integration
+- **Network Connectivity**: VPN or direct connect to cloud
+- **Identity Federation**: Single sign-on across environments
+- **Data Synchronization**: Replication strategies for data consistency
+
+---
+
+## Performance Optimization
+
+### Hardware Acceleration
+
+#### GPU Support
+- **AI/ML Workloads**: NVIDIA GPUs with proper drivers
+- **Graphics Processing**: GPU passthrough for visualization
+- **Monitoring**: GPU metrics collection and alerting
+
+#### Network Optimization
+- **SR-IOV**: Direct network access for high-performance workloads
+- **DPDK**: User-space networking for packet processing
+- **TLS Offloading**: Hardware acceleration for encryption
+
+### Storage Performance
+
+#### I/O Optimization
+- **SSD Configuration**: Proper alignment and TRIM support
+- **RAID Configuration**: Stripe size optimization for workload patterns
+- **Cache Tiering**: Hot/cold data separation strategies
+
+---
+
+## Validation and Testing
+
+### Infrastructure Validation
+
+#### Performance Testing
+- **CPU Benchmarking**: Stress testing with synthetic workloads
+- **Memory Testing**: Memtest86+ for memory validation
+- **Storage Testing**: FIO for I/O performance measurement
+- **Network Testing**: iperf3 for bandwidth and latency testing
+
+#### Capacity Testing
+- **Load Testing**: Simulate production workloads
+- **Scaling Tests**: Validate horizontal scaling capabilities
+- **Failover Testing**: Test high availability scenarios
+
+### Documentation Requirements
+
+#### Infrastructure Documentation
+- **Hardware Inventory**: Complete server and component list
+- **Network Topology**: Detailed network architecture diagrams
+- **Storage Configuration**: RAID levels, LUN configurations
+- **Performance Baselines**: Benchmark results and expectations
+
+---
+
+## Next Steps
+
+Once your infrastructure and capacity planning is complete:
+
+1. **Validate Requirements**: Ensure all hardware meets minimum specifications
+2. **Performance Testing**: Run benchmarks to establish baselines
+3. **Documentation**: Complete infrastructure documentation
+4. **Proceed to Pre-Deployment**: Move to the next phase of deployment planning
+
+---
+
+## Resources
+
+- [OpenShift Hardware Requirements](https://docs.openshift.com/container-platform/latest/installing/installing_bare_metal/installing-bare-metal.html#minimum-resource-requirements_installing-bare-metal)
+- [Performance and Scalability Guidelines](https://docs.openshift.com/container-platform/latest/scalability_and_performance/)
+- [Storage Configuration](https://docs.openshift.com/container-platform/latest/storage/)

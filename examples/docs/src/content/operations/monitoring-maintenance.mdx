@@ -1,0 +1,293 @@
+# OpenShift Monitoring & Maintenance
+
+This page covers ongoing OpenShift monitoring, maintenance procedures, and operational best practices to ensure long-term application stability and performance.
+
+## 📊 OpenShift Monitoring Overview
+
+### Monitoring Stack Components
+- **Prometheus** - Metrics collection and storage
+- **Grafana** - Visualization and dashboards
+- **Alertmanager** - Alert routing and notification
+- **EFK Stack** - Elasticsearch, Fluentd, Kibana for logging
+- **Jaeger** - Distributed tracing (if implemented)
+- **OpenShift Console** - Built-in monitoring and metrics
+
+### Key Monitoring Areas
+- **Application Metrics** - Response times, error rates, throughput
+- **Infrastructure Metrics** - Node resources, pod performance, network
+- **Business Metrics** - User activity, revenue impact, feature usage
+- **Security Metrics** - Authentication failures, access patterns, compliance
+
+## 🔍 Daily Monitoring Tasks
+
+### Application Health Checks
+```bash
+# Check all application pods
+oc get pods -l app=<app-name> -o wide
+
+# Verify pod readiness
+oc get pods -l app=<app-name> -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\t"}{.status.conditions[?(@.type=="Ready")].status}{"\n"}{end}'
+
+# Check application health endpoints
+oc exec $(oc get pods -l app=<app-name> -o jsonpath='{.items[0].metadata.name}') -- curl -f http://localhost:8080/health
+
+# Monitor application logs
+oc logs -l app=<app-name> --tail=100
+```
+
+### Resource Usage Monitoring
+```bash
+# Check pod resource usage
+oc top pods -l app=<app-name>
+
+# Monitor node resources
+oc top nodes
+
+# Check persistent volume usage
+oc get pvc -l app=<app-name>
+
+# Verify resource quotas
+oc describe resourcequota
+```
+
+### Service & Route Monitoring
+```bash
+# Check service endpoints
+oc get endpoints <service-name>
+
+# Verify route accessibility
+oc get routes -l app=<app-name>
+
+# Test external access
+curl -H "Host: <route-host>" https://<route-url>/health
+
+# Check service discovery
+oc get svc -l app=<app-name>
+```
+
+## 📈 Weekly Performance Review
+
+### Performance Metrics Analysis
+- [ ] **Response Time Trends** - Analyze response time patterns
+- [ ] **Error Rate Analysis** - Identify error patterns and spikes
+- [ ] **Resource Utilization** - Review CPU, memory, and storage usage
+- [ ] **Throughput Analysis** - Monitor request volume and capacity
+- [ ] **User Experience Metrics** - Page load times, API response times
+
+### Capacity Planning
+```bash
+# Analyze resource usage trends
+oc adm top pods --all-namespaces --sort-by=cpu
+oc adm top pods --all-namespaces --sort-by=memory
+
+# Check horizontal pod autoscaler status
+oc get hpa -A
+
+# Review resource quotas and limits
+oc get resourcequota -A
+oc get limitrange -A
+```
+
+### Performance Optimization
+- [ ] **Resource Limits Review** - Adjust CPU/memory limits as needed
+- [ ] **Horizontal Scaling** - Configure HPA for better resource utilization
+- [ ] **Image Optimization** - Review and optimize container images
+- [ ] **Caching Strategy** - Implement application-level caching
+- [ ] **Database Optimization** - Review database performance and queries
+
+## 🛠️ Monthly Maintenance Tasks
+
+### OpenShift Cluster Maintenance
+```bash
+# Check cluster health
+oc get nodes
+oc get clusteroperators
+
+# Review cluster events
+oc get events --all-namespaces --sort-by='.lastTimestamp'
+
+# Check cluster version
+oc get clusterversion
+
+# Review cluster resource usage
+oc adm top nodes
+```
+
+### Security & Compliance Review
+- [ ] **RBAC Audit** - Review role bindings and permissions
+- [ ] **Network Policies** - Verify network segmentation
+- [ ] **Security Contexts** - Review pod security policies
+- [ ] **Image Scanning** - Check for new vulnerabilities
+- [ ] **Secret Rotation** - Rotate sensitive credentials
+- [ ] **Compliance Check** - Verify compliance requirements
+
+### Backup & Disaster Recovery
+```bash
+# Backup application configurations
+oc export dc,svc,route,secret,configmap -l app=<app-name> > backup-$(date +%Y%m%d).yaml
+
+# Backup persistent volume data
+oc get pvc -l app=<app-name> -o yaml > pvc-backup-$(date +%Y%m%d).yaml
+
+# Test backup restoration
+oc apply -f backup-$(date +%Y%m%d).yaml
+
+# Verify backup integrity
+oc get all -l app=<app-name>
+```
+
+## 🚨 Proactive Issue Prevention
+
+### Early Warning Systems
+```bash
+# Set up resource monitoring alerts
+oc patch hpa <app-name> -p '{"spec":{"minReplicas":2,"maxReplicas":10,"targetCPUUtilizationPercentage":70}}'
+
+# Configure pod disruption budgets
+oc create pdb <app-name> --selector=app=<app-name> --min-available=1
+
+# Set up network policies for security
+oc create networkpolicy <app-name> --pod-selector=app=<app-name>
+```
+
+### Predictive Maintenance
+- [ ] **Resource Forecasting** - Predict resource needs based on trends
+- [ ] **Performance Degradation** - Identify performance issues before they impact users
+- [ ] **Capacity Planning** - Plan for growth and scaling
+- [ ] **Security Monitoring** - Detect security threats early
+- [ ] **Compliance Monitoring** - Ensure ongoing compliance
+
+## 📊 Monitoring Dashboard Setup
+
+### Grafana Dashboard Configuration
+```yaml
+# Example dashboard configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard
+data:
+  dashboard.json: |
+    {
+      "dashboard": {
+        "title": "OpenShift Application Dashboard",
+        "panels": [
+          {
+            "title": "Pod Status",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "kube_pod_status_phase{phase=\"Running\"}"
+              }
+            ]
+          },
+          {
+            "title": "Response Time",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "http_request_duration_seconds"
+              }
+            ]
+          }
+        ]
+      }
+    }
+```
+
+### Key Metrics to Display
+- **Pod Health** - Running, pending, failed pod counts
+- **Resource Usage** - CPU, memory, storage utilization
+- **Performance Metrics** - Response times, error rates, throughput
+- **Business Metrics** - User activity, revenue impact
+- **Security Metrics** - Authentication, authorization, compliance
+
+## 🔄 Continuous Improvement
+
+### Process Optimization
+- [ ] **Deployment Pipeline** - Optimize CI/CD processes
+- [ ] **Monitoring Tools** - Evaluate and improve monitoring stack
+- [ ] **Alert Management** - Refine alert thresholds and routing
+- [ ] **Documentation** - Keep runbooks and procedures current
+- [ ] **Team Training** - Regular training on new tools and procedures
+
+### Technology Updates
+- [ ] **OpenShift Updates** - Plan and execute cluster updates
+- [ ] **Application Updates** - Regular application version updates
+- [ ] **Security Patches** - Apply security updates promptly
+- [ ] **Tool Evaluation** - Assess new monitoring and maintenance tools
+- [ ] **Best Practices** - Stay current with industry best practices
+
+## 📋 Maintenance Checklist Templates
+
+### Daily Maintenance Checklist
+- [ ] **Pod Health** - All pods running and ready
+- [ ] **Application Health** - Health checks passing
+- [ ] **Resource Usage** - CPU/memory within limits
+- [ ] **Error Monitoring** - No critical errors in logs
+- [ ] **Service Status** - All services responding
+- [ ] **Route Accessibility** - External access working
+
+### Weekly Maintenance Checklist
+- [ ] **Performance Review** - Analyze performance trends
+- [ ] **Capacity Planning** - Review resource utilization
+- [ ] **Security Review** - Check for security issues
+- [ ] **Backup Verification** - Test backup procedures
+- [ ] **Documentation Update** - Update runbooks and procedures
+- [ ] **Team Communication** - Share status and issues
+
+### Monthly Maintenance Checklist
+- [ ] **Cluster Health** - Review cluster status
+- [ ] **Security Audit** - Comprehensive security review
+- [ ] **Compliance Check** - Verify compliance requirements
+- [ ] **Disaster Recovery** - Test DR procedures
+- [ ] **Performance Optimization** - Implement optimizations
+- [ ] **Technology Updates** - Plan and execute updates
+
+## 🐳 OpenShift Maintenance Commands Reference
+
+### Health Check Commands
+```bash
+# Cluster health
+oc get clusteroperators
+oc get nodes
+oc get events --all-namespaces
+
+# Application health
+oc get pods -l app=<app-name>
+oc logs -l app=<app-name> --tail=100
+oc exec <pod-name> -- curl -f http://localhost:8080/health
+```
+
+### Resource Management Commands
+```bash
+# Resource usage
+oc top pods -l app=<app-name>
+oc top nodes
+oc describe resourcequota
+
+# Scaling
+oc scale dc/<app-name> --replicas=3
+oc autoscale dc/<app-name> --min=2 --max=10 --cpu-percent=70
+```
+
+### Maintenance Commands
+```bash
+# Backup
+oc export dc,svc,route -l app=<app-name> > backup.yaml
+oc get pvc -l app=<app-name> -o yaml > pvc-backup.yaml
+
+# Restore
+oc apply -f backup.yaml
+oc apply -f pvc-backup.yaml
+
+# Cleanup
+oc delete pod <pod-name>
+oc delete build <build-name>
+```
+
+---
+
+**🎯 Goal**: Maintain optimal OpenShift application performance, security, and reliability through proactive monitoring and maintenance.
+
+*Previous: [OpenShift Rollback Strategies](./rollback-strategies)*

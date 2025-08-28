@@ -1,0 +1,98 @@
+---
+title: Network
+---
+
+---
+
+# Networking and Security Prerequisites
+
+Proper **networking and security configuration** is essential for a reliable and secure OpenShift deployment.  
+This section covers DNS, load balancing, firewall rules, TLS, and baseline security requirements.  
+
+---
+
+## Networking Requirements
+
+### DNS
+- All cluster nodes must have forward and reverse DNS records.  
+- OpenShift API and application routes require resolvable FQDNs.  
+- Examples:  
+  - `api.cluster.example.com` → OpenShift API server.  
+  - `*.apps.cluster.example.com` → OpenShift Router (Ingress).  
+
+### Cluster Networking
+- Plan CIDR ranges to avoid overlaps with existing networks:  
+  - **Cluster Network CIDR** (default: `10.128.0.0/14`).  
+  - **Service Network CIDR** (default: `172.30.0.0/16`).  
+- Ensure no conflicts with corporate/private LANs or VPNs.  
+- MTU should be consistent across all nodes (important for overlay networks).  
+
+### Load Balancing
+- **API Load Balancer**:  
+  - Routes external traffic to control plane nodes (`api.cluster.example.com:6443`).  
+  - Must support TCP pass-through on port 6443.  
+- **Ingress Load Balancer**:  
+  - Routes traffic to OpenShift Routers on worker nodes (`*.apps.cluster.example.com`).  
+  - Supports HTTP (80) and HTTPS (443).  
+- HA requirement: Minimum of 2 load balancers for redundancy.  
+
+### Firewall & Ports
+- Required open ports between cluster components:  
+  - **Control Plane**: 6443 (Kubernetes API).  
+  - **Workers**: 10250 (Kubelet), 30000–32767 (NodePort).  
+  - **Ingress**: 80/443 for apps.  
+- Allow internal traffic between nodes on required ports.  
+- Ensure egress access to Red Hat registries and update services.  
+
+---
+
+## Security Prerequisites
+
+### TLS & Certificates
+- TLS certificates required for:  
+  - OpenShift API (`api.cluster.example.com`).  
+  - Application routes (`*.apps.cluster.example.com`).  
+- Options:  
+  - Self-signed (for PoC).  
+  - Enterprise CA or Let’s Encrypt (production).  
+
+### Secure Access
+- SSH access to nodes should be restricted to admin users only.  
+- Use key-based authentication (disable password logins).  
+- Jump/bastion host recommended for accessing clusters in production.  
+
+### System Hardening
+- Apply OS security patches before deployment.  
+- Configure SELinux in **enforcing** mode (required by OpenShift).  
+- Align node configuration with CIS Benchmarks.  
+
+---
+
+## Networking & Security Readiness Checklist
+
+✅ **DNS**  
+- [ ] Forward and reverse DNS records created for all nodes.  
+- [ ] `api.cluster.example.com` and `*.apps.cluster.example.com` resolvable.  
+
+✅ **Networking**  
+- [ ] Cluster and Service Network CIDRs planned and non-conflicting.  
+- [ ] MTU validated across all nodes.  
+- [ ] Load balancers provisioned for API and Ingress.  
+
+✅ **Firewall & Ports**  
+- [ ] Required ports opened between control plane and workers.  
+- [ ] External access to API and Router validated.  
+- [ ] Egress access to Red Hat registries allowed.  
+
+✅ **Security**  
+- [ ] TLS certificates generated and validated.  
+- [ ] SSH restricted to authorized users with key-based access.  
+- [ ] Bastion host configured (if applicable).  
+- [ ] SELinux enabled in enforcing mode.  
+- [ ] OS security patches applied.  
+
+---
+
+## Next Steps
+
+With networking and security validated, proceed to the **Identity & Access Management (IAM) Preparation** phase to configure authentication, RBAC, and secrets management.

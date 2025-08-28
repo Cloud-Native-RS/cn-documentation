@@ -1,0 +1,80 @@
+---
+sidebarTitle: Overview
+---
+
+---
+
+# Post-Deployment Phase
+
+The **Post-Deployment Phase** begins once your OpenShift cluster has been successfully installed.  
+This stage ensures that your environment is **operational, secure, and optimized** for workloads and end users.  
+
+While the installation provides a functional cluster, additional **validation, configuration, and enablement steps** are required to reach enterprise production readiness.  
+
+---
+
+## Goals of the Post-Deployment Phase
+
+- Validate the cluster’s **health and stability**.  
+- Configure **security, governance, and compliance policies**.  
+- Establish **observability, monitoring, and logging**.  
+- Enable **networking, storage, and application services**.  
+- Prepare teams for **day-2 operations** (scaling, updates, disaster recovery).  
+
+---
+
+## Key Focus Areas
+
+1. **Cluster Validation**  
+   - Confirm installation success.  
+   - Verify control plane and worker node health.  
+   - Check API server, DNS, and ingress availability.  
+
+2. **Security Hardening**  
+   - Configure authentication (OAuth/LDAP/AD).  
+   - Set up role-based access control (RBAC).  
+   - Apply cluster security policies (PodSecurity, SCC).  
+   - Enable vulnerability scanning and compliance baselines.  
+
+3. **Observability & Logging**  
+   - Configure monitoring (Prometheus, Alertmanager).  
+   - Enable centralized logging (EFK/ELK or Loki stack).  
+   - Set up dashboards and alerting.  
+
+4. **Networking & Storage Configuration**  
+   - Validate ingress controllers and routes.  
+   - Configure persistent storage classes.  
+   - Enable multi-network policies if required.  
+
+5. **Day-2 Operations Readiness**  
+   - Backup and disaster recovery setup.  
+   - Cluster scaling (nodes, storage, workloads).  
+   - Upgrade planning and testing.  
+
+---
+
+## Why It Matters
+
+A successful deployment doesn’t end with the installer.  
+The **Post-Deployment Phase** is essential to:  
+
+- Ensure **operational stability**.  
+- Protect the cluster with **enterprise-grade security controls**.  
+- Provide **observability and transparency** into system behavior.  
+- Enable smooth **scaling and lifecycle management**.  
+
+Without these steps, organizations risk instability, outages, or security gaps in production environments.  
+
+---
+
+## Next Steps
+
+Continue with the detailed sections:  
+
+- [Cluster Validation](./cluster-validation)  
+- [Security Hardening](./security-hardening)  
+- [Observability & Logging](./observability-logging)  
+- [Networking & Storage](./networking-storage)  
+- [Day-2 Operations Readiness](./day2-operations)  
+
+Once complete, your OpenShift platform will be ready for **secure, reliable, and scalable operations**.  

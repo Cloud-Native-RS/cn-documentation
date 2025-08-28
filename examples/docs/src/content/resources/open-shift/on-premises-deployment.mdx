@@ -1,0 +1,40 @@
+---
+title: "On-Premises Deployment"
+---
+
+# Deployment Models: On-Premises
+
+Deploying OpenShift on-premises offers organizations full control over their infrastructure, networking, and data. This deployment model is ideal for workloads that require low-latency access, strict data residency, regulatory compliance, or high-performance computing. Unlike cloud deployments, on-premises clusters allow teams to manage hardware resources directly and tailor configurations to specific operational requirements.
+
+## Infrastructure Considerations
+
+On-premises OpenShift deployments can be installed on bare-metal servers or virtual machines managed through hypervisors like VMware vSphere, KVM, or Hyper-V. Bare-metal installations are often preferred for high-performance workloads because they provide direct access to hardware resources, eliminating the overhead of virtualization. Virtual machine-based deployments offer flexibility, easier scaling, and integration with existing datacenter management systems.
+
+Storage integration is a critical aspect of on-premises deployments. Persistent volumes can be backed by SAN/NAS solutions, Ceph clusters, or local high-performance SSDs. Choosing the right storage configuration ensures that application workloads meet performance and reliability requirements while supporting features like dynamic provisioning, replication, and backup.
+
+Networking must also be carefully planned. VLANs, physical and virtual switches, and software-defined networking (SDN) are configured to enable pod-to-pod communication, isolate sensitive workloads, and provide connectivity for ingress, egress, and management traffic. On-premises deployments often require dedicated networks for database traffic, monitoring, and administrative access to maintain security and performance.
+
+## Control Plane and Worker Nodes
+
+The control plane in an on-premises OpenShift cluster typically consists of multiple master nodes configured for high availability. These nodes manage cluster state, scheduling, and API access. Etcd, the distributed key-value store, runs on the control plane and must be highly available and backed by reliable storage to ensure cluster stability.
+
+Worker nodes host application pods and can be scaled according to workload requirements. Node sizing, including CPU, memory, and storage allocation, must be aligned with the expected application demands. Security hardening at the node level, such as SELinux policies, firewalls, and regular patching, is essential to protect the cluster against potential vulnerabilities.
+
+## Management, Monitoring, and Security
+
+On-premises clusters require integrated management tools to maintain operational visibility. OpenShift provides a web console, CLI tools, and APIs for monitoring resources, managing workloads, and performing administrative tasks. Observability is achieved through Prometheus metrics, centralized logging, and tracing with Jaeger or the OpenShift Service Mesh.
+
+Security in on-premises deployments follows the same principles as cloud deployments. Identity and access management, RBAC, pod security policies, and network segmentation enforce strict control over who can access resources and how workloads communicate. Organizations can also integrate on-premises security solutions such as enterprise firewalls, intrusion detection systems, and local SIEM platforms.
+
+## Hybrid Integration
+
+Many organizations combine on-premises clusters with public cloud deployments to achieve flexibility, redundancy, or burst capacity. In such hybrid models, VPNs or dedicated network links connect the environments securely. Data replication and backup strategies ensure that critical workloads can failover to cloud resources if necessary, while on-premises resources continue to serve latency-sensitive or regulated workloads.
+
+## Benefits of On-Premises Deployment
+
+Deploying OpenShift on-premises allows organizations to maintain full control over their environment, optimize performance for specific workloads, and meet regulatory or compliance requirements. It also provides the flexibility to integrate existing enterprise infrastructure, customize networking and storage configurations, and implement advanced security policies.
+
+At the same time, on-premises deployments require careful planning, operational expertise, and ongoing maintenance to ensure high availability, performance, and security. With proper design and management, on-premises OpenShift clusters provide a reliable foundation for modern cloud-native applications.
+
+---
+

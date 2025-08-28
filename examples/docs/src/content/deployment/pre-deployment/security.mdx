@@ -1,0 +1,100 @@
+---
+title: Security
+
+---
+
+# Security Prerequisites
+
+A secure foundation is critical for any **OpenShift deployment**.  
+Before installing the cluster, the underlying infrastructure and nodes must be **hardened, patched, and integrated with enterprise security controls**.  
+
+This section provides guidelines for **TLS, SSH access, OS hardening, and compliance readiness**.  
+
+---
+
+## TLS & Certificates
+
+- TLS is required for:  
+  - **OpenShift API** → `api.cluster.example.com`  
+  - **Application routes** → `*.apps.cluster.example.com`  
+- Options:  
+  - **Self-signed certificates** – suitable for PoC/test environments.  
+  - **Enterprise CA** – recommended for production (integration with corporate PKI).  
+  - **Let’s Encrypt** – suitable for internet-facing dev/test clusters.  
+- Certificates must include **SANs (Subject Alternative Names)** for API and application FQDNs.  
+- Ensure certificate renewal/rotation processes are documented.  
+
+---
+
+## Secure Node Access
+
+- **SSH configuration**:  
+  - Access limited to cluster administrators only.  
+  - Use **key-based authentication** (disable password login).  
+  - Rotate keys regularly.  
+- **Jump/Bastion Host** (recommended):  
+  - Single controlled entry point to production clusters.  
+  - Enables central auditing of administrator access.  
+- **Audit Logging**:  
+  - Ensure SSH access and sudo commands are logged and monitored.  
+
+---
+
+## Operating System Hardening
+
+- **Patching**: All nodes must have the latest OS security patches applied before installation.  
+- **SELinux**:  
+  - Must be enabled in **enforcing** mode (required by OpenShift).  
+  - Validate custom workloads for SELinux compatibility.  
+- **Firewall**:  
+  - Only required OpenShift ports opened (API, etcd, kubelet, ingress).  
+  - Egress traffic restricted where possible.  
+- **System Services**:  
+  - Disable unnecessary services and daemons.  
+  - Configure NTP/chrony for time synchronization.  
+
+---
+
+## Compliance & Integration
+
+- **Logging & SIEM**:  
+  - Plan integration with enterprise logging systems (Splunk, ELK, or OpenShift EFK stack).  
+- **Vulnerability Scanning**:  
+  - Validate base OS images with scanners (e.g., OpenSCAP, Clair, Trivy).  
+- **Compliance Frameworks** (as applicable):  
+  - CIS Benchmarks.  
+  - ISO 27001.  
+  - PCI DSS, HIPAA, or industry-specific standards.  
+
+---
+
+## Security Readiness Checklist
+
+✅ **TLS**  
+- [ ] Certificates generated for API and application routes.  
+- [ ] Certificates signed by trusted CA for production.  
+- [ ] Certificate renewal process documented.  
+
+✅ **Access Control**  
+- [ ] SSH access restricted to admin accounts.  
+- [ ] Password authentication disabled.  
+- [ ] Bastion host configured (for production).  
+- [ ] Audit logging enabled for admin actions.  
+
+✅ **Hardening**  
+- [ ] Latest OS patches applied.  
+- [ ] SELinux enabled in enforcing mode.  
+- [ ] Firewall configured with only required OpenShift ports.  
+- [ ] Unnecessary services disabled.  
+- [ ] Time synchronization configured.  
+
+✅ **Compliance**  
+- [ ] Integration with enterprise SIEM/logging systems tested.  
+- [ ] Vulnerability scanning performed on base images.  
+- [ ] Compliance benchmarks reviewed (CIS, PCI, HIPAA, etc.).  
+
+---
+
+## Next Steps
+
+After validating all **Security Prerequisites**, continue to [IAM Preparation](./iam-preparation) to configure authentication, RBAC, and secrets management.

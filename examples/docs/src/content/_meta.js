@@ -1,7 +1,7 @@
 export default {
-  index: '',
   'get-started': '',
-  features: '',
-  themes: '',
-  advanced: ''
+  'sales-business': 'Sales',
+  'deployment': 'Deployment',
+  operations: '',
+  resources: ''
 }

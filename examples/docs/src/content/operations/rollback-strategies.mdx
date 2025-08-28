@@ -1,0 +1,283 @@
+# OpenShift Rollback Strategies
+
+This page covers comprehensive rollback strategies to quickly revert OpenShift deployments when issues arise. Having a solid rollback plan is crucial for maintaining system stability.
+
+## 🚨 When to Rollback OpenShift Deployments
+
+### Automatic Rollback Triggers
+- **Pod Health Failures**: Pods failing readiness/liveness probes for 2+ minutes
+- **Error Rate Threshold**: Error rate > 5% for 2+ minutes
+- **Response Time**: Response time > 2x baseline for 3+ minutes
+- **Resource Exhaustion**: CPU or memory usage > 90% for 5+ minutes
+- **Critical Functionality**: Core features completely broken
+- **Security Issues**: Security vulnerabilities detected
+- **Performance Degradation**: Performance drop > 20% from baseline
+
+### Manual Rollback Triggers
+- **User Complaints**: Multiple users reporting critical issues
+- **Business Impact**: Revenue or user engagement dropping
+- **Support Overload**: Support team overwhelmed with issues
+- **Stakeholder Request**: Business stakeholders request rollback
+- **Data Integrity Issues**: Data corruption or loss detected
+- **OpenShift Issues**: Cluster-level problems affecting application
+
+## 🔄 OpenShift Rollback Strategies
+
+### 1. Quick Deployment Rollback (0-5 minutes)
+**Use when**: Critical functionality broken, immediate action required
+
+```bash
+# Emergency rollback to previous deployment
+oc rollout undo dc/<app-name>
+
+# Verify rollback success
+oc rollout status dc/<app-name>
+
+# Check pod status
+oc get pods -l app=<app-name>
+```
+
+**Pros**: Fastest recovery time, OpenShift-native
+**Cons**: May lose recent data, less controlled
+
+### 2. Blue-Green Rollback (10-30 minutes)
+**Use when**: Infrastructure issues or gradual rollback needed
+
+```bash
+# Switch route back to blue environment
+oc patch route <app-name> -p '{"spec":{"to":{"name":"<app-name>-blue"}}}'
+
+# Verify traffic switch
+oc get route <app-name> -o yaml
+
+# Scale down green deployment
+oc scale dc/<app-name>-green --replicas=0
+
+# Scale up blue deployment
+oc scale dc/<app-name>-blue --replicas=3
+```
+
+**Pros**: Zero downtime, controlled rollback
+**Cons**: More complex, requires infrastructure setup
+
+### 3. Canary Rollback (5-15 minutes)
+**Use when**: Gradual rollback to minimize user impact
+
+```bash
+# Gradually shift traffic back to stable version
+oc patch route <app-name> -p '{"spec":{"to":[{"name":"<app-name>-stable","weight":75},{"name":"<app-name>-new","weight":25}]}}'
+
+# Continue shifting until 100% stable
+oc patch route <app-name> -p '{"spec":{"to":[{"name":"<app-name>-stable","weight":100},{"name":"<app-name>-new","weight":0}]}}'
+
+# Scale down problematic deployment
+oc scale dc/<app-name>-new --replicas=0
+```
+
+**Pros**: Minimal user impact, controlled rollback
+**Cons**: Requires route configuration
+
+### 4. Image Rollback (5-10 minutes)
+**Use when**: Specific image version causing issues
+
+```bash
+# Rollback to previous image tag
+oc tag <image-stream>:<previous-tag> <image-stream>:latest
+
+# Trigger new deployment with previous image
+oc rollout latest dc/<app-name>
+
+# Monitor rollback progress
+oc rollout status dc/<app-name>
+```
+
+**Pros**: Fast, targeted rollback
+**Cons**: Requires image stream management
+
+## 📋 OpenShift Rollback Execution Checklist
+
+### Pre-Rollback Preparation
+- [ ] **Issue assessment** - Understand the problem scope
+- [ ] **Impact analysis** - Assess business impact
+- [ ] **Team notification** - Alert relevant team members
+- [ ] **Stakeholder communication** - Inform business stakeholders
+- [ ] **Rollback method selection** - Choose appropriate OpenShift strategy
+- [ ] **Resource verification** - Ensure rollback resources available
+- [ ] **Backup verification** - Confirm application state backup
+
+### Rollback Execution
+- [ ] **Backup current state** - Save current deployment state
+- [ ] **Execute rollback** - Run selected OpenShift rollback strategy
+- [ ] **Verify rollback** - Confirm rollback success
+- [ ] **Health check** - Verify system health
+- [ ] **Functionality test** - Test core features
+- [ ] **Performance check** - Verify performance restored
+
+### Post-Rollback Actions
+- [ ] **Issue investigation** - Investigate root cause
+- [ ] **Documentation** - Document rollback and issues
+- [ ] **Team debrief** - Team review of what happened
+- [ ] **Process improvement** - Update rollback procedures
+- [ ] **Stakeholder update** - Inform stakeholders of resolution
+- [ ] **Monitoring setup** - Enhanced monitoring for future
+
+## 🛠️ OpenShift Rollback Tools & Automation
+
+### Automated Rollback Scripts
+```bash
+#!/bin/bash
+# emergency_rollback.sh
+
+echo "🚨 Emergency OpenShift rollback initiated at $(date)"
+
+# Check current health
+if oc exec $(oc get pods -l app=<app-name> -o jsonpath='{.items[0].metadata.name}') -- curl -f http://localhost:8080/health; then
+    echo "✅ System healthy, no rollback needed"
+    exit 0
+fi
+
+echo "❌ System unhealthy, initiating rollback..."
+
+# Rollback to previous deployment
+oc rollout undo dc/<app-name>
+
+# Wait for rollback
+echo "⏳ Waiting for rollback to complete..."
+oc rollout status dc/<app-name> --timeout=300s
+
+# Verify rollback
+if oc exec $(oc get pods -l app=<app-name> -o jsonpath='{.items[0].metadata.name}') -- curl -f http://localhost:8080/health; then
+    echo "✅ Rollback successful"
+    # Send notification
+    curl -X POST $SLACK_WEBHOOK -d '{"text": "🚨 Emergency OpenShift rollback completed successfully"}'
+else
+    echo "❌ Rollback failed"
+    # Send alert
+    curl -X POST $SLACK_WEBHOOK -d '{"text": "🚨 Emergency OpenShift rollback FAILED - manual intervention required"}'
+    exit 1
+fi
+```
+
+### OpenShift Monitoring & Alerting
+```yaml
+# Rollback alert configuration for OpenShift
+alerts:
+  - name: "OpenShift Rollback Required"
+    condition: "pod_ready == false OR error_rate > 5% OR response_time > 2000ms"
+    duration: "2 minutes"
+    action: "trigger_rollback"
+    
+  - name: "OpenShift Rollback Success"
+    condition: "pod_ready == true AND error_rate < 1% AND health_check == 'healthy'"
+    duration: "1 minute"
+    action: "notify_rollback_success"
+    
+  - name: "OpenShift Rollback Failure"
+    condition: "pod_ready == false OR error_rate > 10% OR health_check == 'unhealthy'"
+    duration: "5 minutes"
+    action: "escalate_emergency"
+```
+
+## 📊 OpenShift Rollback Metrics & KPIs
+
+### Key Performance Indicators
+- **Rollback Time**: Time from issue detection to resolution
+- **Rollback Success Rate**: Percentage of successful rollbacks
+- **Mean Time to Recovery (MTTR)**: Average time to restore service
+- **Pod Recovery Time**: Time for pods to become ready after rollback
+- **User Impact**: Number of users affected by issues
+- **Deployment Stability**: Number of rollbacks per deployment
+
+### OpenShift Rollback Analytics
+```sql
+-- Rollback performance tracking for OpenShift
+SELECT 
+    DATE(rollback_time) as rollback_date,
+    AVG(rollback_duration) as avg_rollback_time,
+    COUNT(*) as rollback_count,
+    AVG(pod_recovery_time) as avg_pod_recovery,
+    AVG(user_impact) as avg_user_impact
+FROM openshift_rollback_events
+WHERE rollback_time >= NOW() - INTERVAL '30 days'
+GROUP BY DATE(rollback_time)
+ORDER BY rollback_date DESC;
+```
+
+## 🔒 OpenShift Rollback Security Considerations
+
+### Access Control
+- [ ] **Rollback permissions** - Only authorized personnel can rollback
+- [ ] **RBAC verification** - Role-based access control configured
+- [ ] **Audit logging** - All rollback actions logged via OpenShift
+- [ ] **Approval workflow** - Major rollbacks require approval
+- [ ] **Emergency procedures** - Emergency rollback procedures documented
+
+### Data Protection
+- [ ] **Persistent volume backup** - Data backup before rollback
+- [ ] **Secret verification** - Sensitive data integrity maintained
+- [ ] **ConfigMap validation** - Configuration data consistency
+- [ ] **Compliance** - Rollback procedures meet compliance requirements
+
+## 📚 OpenShift Rollback Best Practices
+
+### Preparation
+1. **Always have a rollback plan** - Never deploy without rollback strategy
+2. **Test rollback procedures** - Regularly test rollback processes
+3. **Document everything** - Maintain detailed rollback documentation
+4. **Train your team** - Ensure team knows OpenShift rollback procedures
+5. **Monitor deployment health** - Use OpenShift health checks and probes
+
+### Execution
+1. **Act quickly** - Don't wait too long to rollback
+2. **Use OpenShift native tools** - Leverage `oc rollout undo` and other commands
+3. **Monitor closely** - Watch for issues during rollback
+4. **Verify success** - Always confirm rollback worked
+5. **Check all components** - Verify pods, services, and routes
+
+### Post-Rollback
+1. **Investigate root cause** - Understand what went wrong
+2. **Learn from experience** - Improve processes based on lessons
+3. **Update procedures** - Refine rollback strategies
+4. **Team debrief** - Review what happened and why
+5. **Update runbooks** - Document lessons learned
+
+## 🐳 OpenShift-Specific Rollback Commands
+
+### Deployment Rollback Commands
+```bash
+# Rollback to previous deployment
+oc rollout undo dc/<app-name>
+
+# Rollback to specific revision
+oc rollout undo dc/<app-name> --to-revision=<revision-number>
+
+# Check rollback history
+oc rollout history dc/<app-name>
+
+# Monitor rollback progress
+oc rollout status dc/<app-name>
+
+# Cancel ongoing rollback
+oc rollout cancel dc/<app-name>
+```
+
+### Pod and Service Verification
+```bash
+# Check pod status after rollback
+oc get pods -l app=<app-name> -o wide
+
+# Verify pod readiness
+oc get pods -l app=<app-name> -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\t"}{.status.conditions[?(@.type=="Ready")].status}{"\n"}{end}'
+
+# Check service endpoints
+oc get endpoints <service-name>
+
+# Verify route accessibility
+oc get routes -l app=<app-name>
+```
+
+---
+
+**🎯 Goal**: Minimize downtime and user impact through quick, effective OpenShift rollbacks.
+
+*Previous: [OpenShift Post-Deployment Checklist](./post-deployment) | Next: [Monitoring & Maintenance](./monitoring-maintenance)*
