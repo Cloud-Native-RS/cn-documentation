@@ -110,7 +110,7 @@ export default {
       'built-ins': '',
       _: {
         type: 'separator',
-        title: 'Themes'
+        title: 'Sales'
       },
       'docs-theme': {
         items: {
