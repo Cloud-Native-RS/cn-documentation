@@ -1,0 +1,50 @@
+{
+  "type": "page",
+  "title": "Guide",
+  "children": [
+    {
+      "title": "Markdown",
+      "href": "/docs/guide/markdown"
+    },
+    {
+      "title": "Link",
+      "href": "/docs/guide/link"
+    },
+    {
+      "title": "Image",
+      "href": "/docs/guide/image"
+    },
+    {
+      "title": "Syntax Highlighting",
+      "href": "/docs/guide/syntax-highlighting"
+    },
+    {
+      "title": "Static Site Generation",
+      "href": "/docs/guide/ssg"
+    },
+    {
+      "title": "Internationalization",
+      "href": "/docs/guide/i18n"
+    },
+    {
+      "title": "Custom CSS",
+      "href": "/docs/guide/custom-css"
+    },
+    {
+      "title": "Search",
+      "href": "/docs/guide/search"
+    },
+    {
+      "title": "Static Exports",
+      "href": "/docs/guide/static-exports"
+    },
+    {
+      "title": "GitHub Alert Syntax",
+      "href": "/docs/guide/github-alert-syntax"
+    },
+    {
+      "title": "Turbopack",
+      "href": "/docs/guide/turbopack"
+    }
+  ]
+}

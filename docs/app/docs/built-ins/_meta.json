@@ -1,0 +1,10 @@
+{
+  "type": "page",
+  "title": "Built-ins",
+  "children": [
+    {
+      "title": "Dynamic Components",
+      "href": "/docs/built-ins/[name]"
+    }
+  ]
+}

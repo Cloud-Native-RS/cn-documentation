@@ -1,0 +1,26 @@
+{
+  "type": "page",
+  "title": "File Conventions",
+  "children": [
+    {
+      "title": "Page File",
+      "href": "/docs/file-conventions/page-file"
+    },
+    {
+      "title": "Meta File",
+      "href": "/docs/file-conventions/meta-file"
+    },
+    {
+      "title": "MDX Components File",
+      "href": "/docs/file-conventions/mdx-components-file"
+    },
+    {
+      "title": "Content Directory",
+      "href": "/docs/file-conventions/content-directory"
+    },
+    {
+      "title": "Src Directory",
+      "href": "/docs/file-conventions/src-directory"
+    }
+  ]
+}

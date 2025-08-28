@@ -1,0 +1,26 @@
+{
+  "type": "page",
+  "title": "Blog Theme",
+  "children": [
+    {
+      "title": "Get Started",
+      "href": "/docs/blog-theme/start"
+    },
+    {
+      "title": "Get Posts and Tags",
+      "href": "/docs/blog-theme/get-posts-and-tags"
+    },
+    {
+      "title": "Posts",
+      "href": "/docs/blog-theme/posts"
+    },
+    {
+      "title": "Tags",
+      "href": "/docs/blog-theme/tags"
+    },
+    {
+      "title": "RSS",
+      "href": "/docs/blog-theme/rss"
+    }
+  ]
+}

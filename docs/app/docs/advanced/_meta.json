@@ -1,0 +1,42 @@
+{
+  "type": "page",
+  "title": "Advanced",
+  "children": [
+    {
+      "title": "TypeScript",
+      "href": "/docs/advanced/typescript"
+    },
+    {
+      "title": "Tailwind CSS",
+      "href": "/docs/advanced/tailwind-css"
+    },
+    {
+      "title": "LaTeX",
+      "href": "/docs/advanced/latex"
+    },
+    {
+      "title": "Mermaid",
+      "href": "/docs/advanced/mermaid"
+    },
+    {
+      "title": "Table",
+      "href": "/docs/advanced/table"
+    },
+    {
+      "title": "NPM to Yarn",
+      "href": "/docs/advanced/npm2yarn"
+    },
+    {
+      "title": "Remote",
+      "href": "/docs/advanced/remote"
+    },
+    {
+      "title": "Twoslash",
+      "href": "/docs/advanced/twoslash"
+    },
+    {
+      "title": "Customize Cascade Layers",
+      "href": "/docs/advanced/customize-the-cascade-layers"
+    }
+  ]
+}

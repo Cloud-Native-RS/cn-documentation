@@ -1,0 +1,51 @@
+{
+  "type": "page",
+  "title": "Documentation",
+  "display": "Docs Home",
+  "children": [
+    {
+      "title": "Introduction",
+      "display": "Introduction",
+      "href": "/docs"
+    },
+    {
+      "title": "File Conventions",
+      "display": "File Conventions",
+      "href": "/docs/file-conventions"
+    },
+    {
+      "title": "Guide",
+      "display": "Guide",
+      "href": "/docs/guide"
+    },
+    {
+      "title": "Advanced",
+      "display": "Advanced",
+      "href": "/docs/advanced"
+    },
+    {
+      "title": "Built-ins",
+      "display": "Built-ins",
+      "href": "/docs/built-ins"
+    },
+    {
+      "type": "separator",
+      "title": "Themes"
+    },
+    {
+      "title": "Docs Theme",
+      "display": "Docs Theme",
+      "href": "/docs/docs-theme"
+    },
+    {
+      "title": "Blog Theme",
+      "display": "Blog Theme",
+      "href": "/docs/blog-theme"
+    },
+    {
+      "title": "Custom Theme",
+      "display": "Custom Theme",
+      "href": "/docs/custom-theme"
+    }
+  ]
+}

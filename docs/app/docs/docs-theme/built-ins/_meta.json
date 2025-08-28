@@ -1,0 +1,22 @@
+{
+  "type": "page",
+  "title": "Built-ins",
+  "children": [
+    {
+      "title": "Layout",
+      "href": "/docs/docs-theme/built-ins/layout"
+    },
+    {
+      "title": "Navbar",
+      "href": "/docs/docs-theme/built-ins/navbar"
+    },
+    {
+      "title": "Footer",
+      "href": "/docs/docs-theme/built-ins/footer"
+    },
+    {
+      "title": "Not Found",
+      "href": "/docs/docs-theme/built-ins/not-found"
+    }
+  ]
+}

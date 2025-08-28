@@ -61,14 +61,17 @@ const banner = (
 const navbar = (
   <Navbar
     logo={
-      <NextraLogo
-        height="20"
+      <span
+        style={{ fontWeight: 'bold', fontSize: 20, letterSpacing: 1 }}
         className={cn(
           'hover:transition-all hover:duration-1000 motion-reduce:hover:transition-none',
           '[mask-image:linear-gradient(60deg,#000_25%,rgba(0,0,0,.2)_50%,#000_75%)] [mask-position:0] [mask-size:400%]',
           'hover:[mask-position:100%]'
         )}
-      />
+        suppressHydrationWarning={true}
+      >
+        Cloud Native
+      </span>
     }
     projectLink="https://github.com/shuding/nextra"
   />

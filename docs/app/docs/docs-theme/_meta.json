@@ -1,0 +1,18 @@
+{
+  "type": "page",
+  "title": "Docs Theme",
+  "children": [
+    {
+      "title": "Get Started",
+      "href": "/docs/docs-theme/start"
+    },
+    {
+      "title": "Built-ins",
+      "href": "/docs/docs-theme/built-ins"
+    },
+    {
+      "title": "API",
+      "href": "/docs/docs-theme/api"
+    }
+  ]
+}
